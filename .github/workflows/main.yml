@@ -61,7 +61,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: dist/ws_tcg_2.zip
+        asset_path: /home/runner/work/pa/pa/dist/ws_tcg_2.zip
         asset_name: ws_tcg_2.zip
         asset_content_type: application/zip
 
