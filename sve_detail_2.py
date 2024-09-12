@@ -87,7 +87,7 @@ def download_img(img_url, img_name):
         r = sess.get(img_url, headers = header, stream = True, timeout=5)
         print(r.status_code)
         if r.status_code == 200:
-            filename = os.path.join(r'C:\Users\27042\Desktop\pa\Pic\sve_image', img_name)
+            filename = os.path.join(r'C:\Users\zy\Desktop\pa\pa\Pic\sve_image', img_name)
             open(filename, 'wb').write(r.content)
             print(filename)
             print('done')
@@ -97,17 +97,17 @@ def download_img(img_url, img_name):
         return
 
 if __name__ == "__main__":
-    url = "https://shadowverse-evolve.com/cardlist/cardsearch/?expansion=BP06"
+    url = "https://shadowverse-evolve.com/cardlist/cardsearch/?expansion=BP11"
     r = sess.get(url, headers=header, timeout=5)
     #print(r.content)
-    max_page = re.findall(r'\d{2}', str(re.findall(r'var max_page = \d{2};', r.content.decode('utf-8'))))
+    max_page = re.findall(r'\d+', str(re.findall(r'var max_page = \d+;', r.content.decode('utf-8'))))
     print(max_page)
     card_url = []
     img_url = []
     uuid = 0
     
     for i in range(int(max_page[0])):
-        url1 = "https://shadowverse-evolve.com/cardlist/cardsearch_ex?expansion=BP06&page={}".format(i+1)
+        url1 = "https://shadowverse-evolve.com/cardlist/cardsearch_ex?expansion=BP11&page={}".format(i+1)
         r2 = sess.get(url=url1, timeout=5, cookies=r.cookies)
         soup = BeautifulSoup(r2.content, "html.parser")
         # tag = soup.find(lambda tag: tag.name == 'ul' and tag.get('class') == ['cardlist-Result_List cardlist-Result_List_Gallery'])
@@ -124,8 +124,8 @@ if __name__ == "__main__":
             uuid += 1
             time.sleep(random.randint(1, 2))
             if uuid % 5 == 0:
-                df_ret.to_excel(os.getcwd() + '/sve_detail.xlsx', index=False)
-        df_ret.to_excel(os.getcwd() + '/sve_detail.xlsx', index=False)
+                df_ret.to_excel(os.getcwd() + '/sve_detail_bp11.xlsx', index=False)
+        df_ret.to_excel(os.getcwd() + '/sve_detail_bp11.xlsx', index=False)
         card_url.clear()
         img_url.clear()
         print(("第{}页".format(str(i+1))).center(50, '*'))

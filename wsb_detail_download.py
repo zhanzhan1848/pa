@@ -23,17 +23,17 @@ header = {
 
 url_main = "https://ws-blau.com"
 
-url1 = "https://ws-blau.com/cardlist/cardsearch/?keyword=&keyword_type%5B%5D=all&search_type=and&title=&category%5B%5D=all&card_kind=&level_from=&level_to=&power_from=&power_to=&soul_from=&soul_to=&cost_from=&cost_to=&trigger=&rare=&feature=&color=&processing%5B%5D=all"
+url1 = "https://ws-blau.com/cardlist/cardsearch?expansion=BLK%2F01S"
 
 r = sess.get(url1, headers=header, timeout=5)
 #print(re.findall( r"var max_page = [0-9]{3};", r.content.decode('utf-8')))
-max_page = re.sub("\D", "", str(re.findall( r"var max_page = [0-9]{2};", r.content.decode('utf-8'))))
+max_page = re.sub("\D", "", str(re.findall( r"var max_page = [0-9]{1};", r.content.decode('utf-8'))))
 print(max_page)
 
 uuid = 0
 
 for i in range(1, int(max_page) + 1):
-    url2 = "https://ws-blau.com/cardlist/cardsearch_ex?keyword=&keyword_type%5B0%5D=all&search_type=and&title=&category%5B0%5D=all&card_kind=&level_from=&level_to=&power_from=&power_to=&soul_from=&soul_to=&cost_from=&cost_to=&trigger=&rare=&feature=&color=&processing%5B0%5D=all&page={}".format(i)
+    url2 = "https://ws-blau.com/cardlist/cardsearch_ex?expansion=BLK%2F01S&view=image&page={}".format(i)
     r2 = sess.get(url2, headers=header, timeout=5)
     soup = BeautifulSoup(r2.content, "html.parser")
     
@@ -77,14 +77,14 @@ for i in range(1, int(max_page) + 1):
             df_row_now.clear()
             uuid += 1
             if uuid % 5 == 0:
-                df_row.to_excel(os.getcwd() + '/wsb_detail.xlsx', index=False)
+                df_row.to_excel(os.getcwd() + '/wsb_blk01s_detail.xlsx', index=False)
             img_url = url_main + card_info.find('div', attrs={'class':'img_Box'}).find('img')['src']
             img_name = str(img_url).split('/')[-1]
             try:
                 r = sess.get(img_url, headers = header, stream = True, timeout=5)
                 print(r.status_code)
                 if r.status_code == 200:
-                    filename = os.path.join(r'C:\Users\27042\Desktop\pa\Pic\wsb_image', img_name)
+                    filename = os.path.join(r'C:\Users\zy\Desktop\pa\pa\Pic\wsb_image', img_name)
                     open(filename, 'wb').write(r.content)
                     print(filename)
                     print('done')
@@ -93,7 +93,7 @@ for i in range(1, int(max_page) + 1):
                 print(e)
         except Exception as e:
             print(e)
-            df_row.to_excel(os.getcwd() + '/wsb_detail.xlsx', index=False)
-    df_row.to_excel(os.getcwd() + '/wsb_detail.xlsx', index=False)
-df_row.to_excel(os.getcwd() + '/wsb_detail.xlsx', index=False)
+            df_row.to_excel(os.getcwd() + '/wsb_blk01s_detail.xlsx', index=False)
+    df_row.to_excel(os.getcwd() + '/wsb_blk01s_detail.xlsx', index=False)
+df_row.to_excel(os.getcwd() + '/wsb_blk01s_detail.xlsx', index=False)
     

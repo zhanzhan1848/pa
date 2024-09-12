@@ -29,7 +29,7 @@ header = {
         "Content-Type": "application/json",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
     }
-
+package_name = "S115"
 
 
 def get_package_url(index, value):
@@ -38,7 +38,7 @@ def get_package_url(index, value):
 		"expansion_select": "",
 		"title_number_select": "",
 		"cmd": "search",
-		"keyword": "W106",#str(index) + str(value).zfill(2),
+		"keyword": "",#str(index) + str(value).zfill(2),
 		"keyword_or": "",
 		"keyword_not": "",
 		"keyword_cardname": 0,
@@ -48,7 +48,7 @@ def get_package_url(index, value):
 		"side": "",
 		"title_number": "",
 		"expansion_category": "",
-		"expansion": "",
+		"expansion": "478",
 		"card_kind": "",
 		"level_s": "",
 		"level_e": "",
@@ -67,6 +67,7 @@ def get_package_url(index, value):
 		"expansion_filter": "",
 		"button": "条件を変えて再検索する"
 	}
+
 	data = json.dumps(data)
 
 	content = sess.post(url=url1, data=data, headers=header, timeout=5)
@@ -106,8 +107,8 @@ def get_package_url(index, value):
 			time.sleep(int(format(random.randint(1, 2))))
 			uuid += 1
 			if uuid % 5 == 0:
-				df_ret.to_excel(os.getcwd() + "/ws_detail_W106.xlsx", index = False)
-		df_ret.to_excel(os.getcwd() + "/ws_detail_W106.xlsx", index = False)
+				df_ret.to_excel(os.getcwd() + "/ws_detail_{}.xlsx".format(package_name), index = False)
+		df_ret.to_excel(os.getcwd() + "/ws_detail_{}.xlsx".format(package_name), index = False)
 		url_ext.clear()
 		print("*******************   This  is page : (   %d  )  **********************" % i)
 
@@ -157,7 +158,9 @@ def download_img(img_url, img_name):
 	r = sess.get(img_url, headers = header, stream = True, timeout=5)
 	print(r.status_code)
 	if r.status_code == 200:
-		filename = os.path.join(os.getcwd() + '/Pic/ws_image/W106', img_name)
+		if not os.path.exists(os.path.join(os.getcwd() + '/Pic/ws_image/{}'.format(package_name))):
+			os.mkdir(os.path.join(os.getcwd() + '/Pic/ws_image/{}'.format(package_name)))
+		filename = os.path.join(os.getcwd() + '/Pic/ws_image/{}'.format(package_name), img_name)
 		open(filename, 'wb').write(r.content)
 		print(filename)
 		print('done')
@@ -174,4 +177,4 @@ if __name__ == '__main__':
 	# 	df_ret.to_excel(r"C:/Users/27042/Desktop/pa/ws_detail_w102.xlsx", index = False)
 	# df_ret.to_excel(r"C:/Users/27042/Desktop/pa/ws_detail_w102.xlsx", index = False)
 	get_package_url("W", 105)
-	df_ret.to_excel(os.getcwd() + "/ws_detail_W106.xlsx", index = False)
+	df_ret.to_excel(os.getcwd() + "/ws_detail_{}.xlsx".format(package_name), index = False)
