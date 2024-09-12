@@ -52,7 +52,7 @@ jobs:
     # Since we have a directory, create a zip
     - name: zip the artifect dir into a zip
       run: |
-        zip -r /home/runner/work/pa/pa/dist/ws_tcg_2.zip /home/runner/work/pa/pa/dist/ws_tcg_2/
+        zip -r /home/runner/work/pa/pa/dist/ws_tcg_2.zip /home/runner/work/pa/pa/dist/ws_tcg_2
     
     - name: Upload release asset
       id: upload-release-asset
