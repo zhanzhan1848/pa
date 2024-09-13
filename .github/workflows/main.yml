@@ -35,7 +35,8 @@ jobs:
 
     - name: Zip the executable
       run: |
-        zip -r ws_tcg_2.zip dist/ws_tcg_2.exe
+        Compress-Archive -Path dist/ws_tcg_2.exe -DestinationPath ws_tcg_2.zip
+      shell: pwsh
 
     - name: Create release
       id: create_release
