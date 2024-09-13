@@ -21,7 +21,8 @@ jobs:
     - name: Set up Python 3.10
       uses: actions/setup-python@v1
       with:
-        python-version: 3.10.14
+        python-version: '3.10'  # or specify '3.10.x' to use the latest patch of 3.10
+        architecture: 'x64'     # Optional, x64 is the default and may not be needed
     
     - name: Install requirements and installer
       run: |
