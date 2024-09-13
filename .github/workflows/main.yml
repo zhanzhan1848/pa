@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -30,11 +30,11 @@ jobs:
 
     - name: Run pyinstaller
       run: |
-        python -m PyInstaller -F ws_tcg_2.py
+        python -m PyInstaller -F -c ws_tcg_2.py
     - uses: actions/upload-artifact@v4
       with:
-        name: ws_tcg_2
-        path: /home/runner/work/pa/pa/dist/ws_tcg_2
+        name: ws_tcg_2.exe
+        path: /home/runner/work/pa/pa/dist/ws_tcg_2/
       
     - name: create release
       id: create_release
