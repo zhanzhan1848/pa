@@ -5,6 +5,7 @@ import random
 import requests
 import os
 import json
+import sys
 from requests.adapters import HTTPAdapter
 
 sess = requests.session()
@@ -32,7 +33,7 @@ header = {
 package_name = "S115"
 
 
-def get_package_url(index, value):
+def get_package_url(package_num):
 	data = {
 		"_method": "POST",
 		"expansion_select": "",
@@ -48,7 +49,7 @@ def get_package_url(index, value):
 		"side": "",
 		"title_number": "",
 		"expansion_category": "",
-		"expansion": "478",
+		"expansion": str(package_num),
 		"card_kind": "",
 		"level_s": "",
 		"level_e": "",
@@ -176,5 +177,10 @@ if __name__ == '__main__':
 	# 		df_ret.to_excel(r"C:/Users/27042/Desktop/pa/ws_detail_w102.xlsx", index = False)
 	# 	df_ret.to_excel(r"C:/Users/27042/Desktop/pa/ws_detail_w102.xlsx", index = False)
 	# df_ret.to_excel(r"C:/Users/27042/Desktop/pa/ws_detail_w102.xlsx", index = False)
-	get_package_url("W", 105)
-	df_ret.to_excel(os.getcwd() + "/ws_detail_{}.xlsx".format(package_name), index = False)
+	global package_name
+	if len(sys.argv) >= 2:
+		package_name = sys.argv[2]
+		get_package_url(sys.argv[1])
+		df_ret.to_excel(os.getcwd() + "/ws_detail_{}.xlsx".format(package_name), index = False)
+	else
+		print("输入数据不足")
