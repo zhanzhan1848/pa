@@ -80,38 +80,28 @@ def get_package_url(package_num):
 	uuid = 0
 
 	for i in range(1, 5):
-		# tag1 = soup.find(lambda tag: tag.name == 'table' and tag.get('class') == ['search-result-table'])
-		# tag2 = tag1.find_all(name="td")
-		# for tag3 in tag2:
-		# 	url_ext.append(tag3.find(name="h4").find(name="a")['href'])
-
 		content1 = sess.get(url=content.url, params={'page': i}, headers=header, timeout=5)
 		soup1 = BeautifulSoup(content1.text, "html.parser")
-		tag5 = soup1.find(lambda tag: tag.name == 'table' and tag.get('class') == ['search-result-table'])
-		tag6 = tag5.find_all(name="td")
-		for tag7 in tag6:
-			url_ext.append(tag7.find(name="h4").find(name="a")['href'])
-	
-	#print(len(url_ext))
-		for ext in url_ext:
-		# 	print(tag4)
-		# print(tag2)
-
-		# p = tag.find(name="a")
-		# m = p.find(name="img")
-		# for j in range(1, 170):
-		# 	for k in ["SSP", "SP", "SEC", "S", "R", ""]:
-			# detail_url = r"https://ws-tcg.com" + p['href'].split("-")[0] + "-" + str(j).zfill(3) + k + r"&l"
-			detail_url = r"https://ws-tcg.com" + ext
-			print(detail_url)
-			down_detail(detail_url)
-			time.sleep(int(format(random.randint(1, 2))))
-			uuid += 1
-			if uuid % 5 == 0:
-				df_ret.to_excel(os.getcwd() + "/ws_detail_{}.xlsx".format(package_name), index = False)
-		df_ret.to_excel(os.getcwd() + "/ws_detail_{}.xlsx".format(package_name), index = False)
-		url_ext.clear()
-		print("*******************   This  is page : (   %d  )  **********************" % i)
+		try:
+			tag5 = soup1.find(lambda tag: tag.name == 'table' and tag.get('class') == ['search-result-table'])
+			tag6 = tag5.find_all(name="td")
+			for tag7 in tag6:
+				url_ext.append(tag7.find(name="h4").find(name="a")['href'])
+		
+			for ext in url_ext:
+				detail_url = r"https://ws-tcg.com" + ext
+				print(detail_url)
+				down_detail(detail_url)
+				time.sleep(int(format(random.randint(1, 2))))
+				uuid += 1
+				if uuid % 5 == 0:
+					df_ret.to_excel(os.getcwd() + "/ws_detail_{}.xlsx".format(package_name), index = False)
+			df_ret.to_excel(os.getcwd() + "/ws_detail_{}.xlsx".format(package_name), index = False)
+			url_ext.clear()
+			print("*******************   This  is page : (   %d  )  **********************" % i)
+		except Exception as e:
+			print(f"An error occurred: {e}")
+			continue
 
 
 
@@ -150,8 +140,8 @@ def down_detail(url):
 		df_ret = df_ret.append(df_ret_row, ignore_index=True)
 		df_ret_row.clear()
 		print(df_ret)
-	except:
-		return
+	except Exception as e:
+		print(f"An error occurred: {e}")
 
 
 def download_img(img_url, img_name):
