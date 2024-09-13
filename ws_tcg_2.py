@@ -160,7 +160,7 @@ def download_img(img_url, img_name):
 	print(r.status_code)
 	if r.status_code == 200:
 		if not os.path.exists(os.path.join(os.getcwd() + '/Pic/ws_image/{}'.format(package_name))):
-			os.mkdir(os.path.join(os.getcwd() + '/Pic/ws_image/{}'.format(package_name)))
+			os.mkdirs(os.path.join(os.getcwd() + '/Pic/ws_image/{}'.format(package_name)))
 		filename = os.path.join(os.getcwd() + '/Pic/ws_image/{}'.format(package_name), img_name)
 		open(filename, 'wb').write(r.content)
 		print(filename)
