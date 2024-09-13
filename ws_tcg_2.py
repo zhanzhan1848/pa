@@ -177,7 +177,6 @@ if __name__ == '__main__':
 	# 		df_ret.to_excel(r"C:/Users/27042/Desktop/pa/ws_detail_w102.xlsx", index = False)
 	# 	df_ret.to_excel(r"C:/Users/27042/Desktop/pa/ws_detail_w102.xlsx", index = False)
 	# df_ret.to_excel(r"C:/Users/27042/Desktop/pa/ws_detail_w102.xlsx", index = False)
-	global package_name
 	if len(sys.argv) >= 2:
 		package_name = sys.argv[2]
 		get_package_url(sys.argv[1])
