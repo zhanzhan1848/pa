@@ -182,5 +182,5 @@ if __name__ == '__main__':
 		package_name = sys.argv[2]
 		get_package_url(sys.argv[1])
 		df_ret.to_excel(os.getcwd() + "/ws_detail_{}.xlsx".format(package_name), index = False)
-	else
+	else:
 		print("输入数据不足")
