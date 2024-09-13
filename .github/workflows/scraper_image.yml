@@ -1,0 +1,71 @@
+name: Scrape Images and Release
+
+on:
+  workflow_dispatch:  # Allows you to manually trigger the workflow from the GitHub Actions tab.
+    inputs:
+      release_tag:
+        description: 'Release tag to fetch the zip from'
+        required: true
+        default: 'latest'
+      package_num:
+        description: 'Arguments to pass to the executable, for package num(e.g. 485)'
+        required: true
+        default: '485'
+      package_name:
+        description: 'Arguments to pass to the executable, for package name(e.g. W118)'
+        required: true
+        default: 'S118'
+
+jobs:
+  scrape-and-release:
+    runs-on: ubuntu-latest  # Uses the latest Ubuntu runner.
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.14'
+
+      # Step 3: Install Python dependencies
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt  # Adjust this to your requirements file if necessary
+
+      # Step 4: Run the Python script to scrape images
+      - name: Run image scraper
+        run: |
+          python ws_tcg_2.py ${{ github.event.inputs.package_num }} ${{ github.event.inputs.package_name }} # Replace this with the name of your Python script
+
+      # Step 5: Compress images into a ZIP file
+      - name: Compress images into ZIP
+        run: |
+          zip -r ${{ github.event.inputs.package_name }}.zip ./${{ github.event.inputs.package_name }}  # Adjust path to your images folder
+
+      # Step 6: Create a release (or update an existing one)
+      - name: Create or update release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token is automatically provided by GitHub
+        with:
+          tag_name: "scraped-images-${{ github.run_number }}"  # Unique tag for each run
+          release_name: "Scraped Images Release ${{ github.run_number }}"
+          body: "Images scraped and compressed in this release."
+          draft: false
+          prerelease: false
+
+      # Step 7: Upload the ZIP file to the release
+      - name: Upload ZIP to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ github.event.inputs.package_name }}.zip
+          asset_name: ${{ github.event.inputs.package_name }}.zip
+          asset_content_type: application/zip
